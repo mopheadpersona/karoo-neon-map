@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionInfo
+    displayName="@string/extension_name"
+    icon="@drawable/ic_ext"
+    id="gtavimap"
+    mapLayer="true">
+    <!-- The data fields: typeId as in FieldKind (FieldArt.kt). Each draws its whole cell itself. -->
+    <DataType typeId="wanted" displayName="@string/f_wanted" description="@string/f_wanted_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="health" displayName="@string/f_health" description="@string/f_health_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="stamina" displayName="@string/f_stamina" description="@string/f_stamina_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="focus" displayName="@string/f_focus" description="@string/f_focus_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="speed" displayName="@string/f_speed" description="@string/f_speed_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="cash" displayName="@string/f_cash" description="@string/f_cash_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="time" displayName="@string/f_time" description="@string/f_time_d" graphical="true" icon="@drawable/ic_ext" />
+    <!-- The GTA profile's own fields (0.4). -->
+    <DataType typeId="hud" displayName="@string/f_hud" description="@string/f_hud_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="hudside" displayName="@string/f_hudside" description="@string/f_hudside_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="speedbar" displayName="@string/f_speedbar" description="@string/f_speedbar_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="speedpair" displayName="@string/f_speedpair" description="@string/f_speedpair_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="hrpair" displayName="@string/f_hrpair" description="@string/f_hrpair_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="powerpair" displayName="@string/f_powerpair" description="@string/f_powerpair_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="profile" displayName="@string/f_profile" description="@string/f_profile_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="nextplace" displayName="@string/f_nextplace" description="@string/f_nextplace_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="nextclimb" displayName="@string/f_nextclimb" description="@string/f_nextclimb_d" graphical="true" icon="@drawable/ic_ext" />
+    <DataType typeId="places" displayName="@string/f_places" description="@string/f_places_d" graphical="true" icon="@drawable/ic_ext" />
+</ExtensionInfo>

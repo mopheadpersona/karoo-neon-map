@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  New values for colours of the Karoo's ride app (io.hammerhead.rideapp). The names are the ride
+  app's own; the comments give its stock values. Change them here.
+-->
+<resources>
+    <!-- A route made on the Karoo. Stock: #D7A0F4 (lilac). Here: the project's waypoint pink. -->
+    <color name="localRouteColor">#FFF06DB5</color>
+    <!-- A synced route. Stock: #FFFF00 (yellow). -->
+    <color name="onRouteColor">#FFF06DB5</color>
+    <!-- The edge of the route line. Stock: #000000. -->
+    <color name="routeCasingColor">#FF6B1E55</color>
+    <!-- The reroute / rejoin line. Stock: #FF0000. -->
+    <color name="rerouteColor">#FFFF8A3D</color>
+    <!-- A climb on the route, and the part already climbed. Stock: #2386D9 and #005297. -->
+    <color name="climbLineColor">#FFFFD23F</color>
+    <color name="completedClimbLineColor">#FFB8922A</color>
+</resources>

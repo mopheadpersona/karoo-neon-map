@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Written by make_karoo_theme.py; do not edit by hand. -->
+<!-- GTA VI look for the Karoo 2's own map (night), inspired by the in-game map. -->
+<rendertheme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" map-background="#215C5F"
+    version="1" xmlns="http://mapsforge.org/renderTheme"
+    xsi:schemaLocation="http://mapsforge.org/renderTheme https://raw.githubusercontent.com/mapsforge/vtm/master/resources/rendertheme.xsd">
+
+    <!-- Land and sea -->
+    <m e="way" k="natural" v="issea|sea">
+        <area mesh="true" fill="#474A80"/>
+    </m>
+    <m e="way" k="natural" v="nosea">
+        <area mesh="true" fill="#215C5F"/>
+    </m>
+
+    <!-- Areas, bottom to top. Closed ways that are neither roads nor houses. -->
+    <m closed="yes" e="way" k="highway|building" v="~">
+        <!-- Town ground -->
+        <m k="landuse" v="residential|commercial|retail|industrial|railway|construction|garages|brownfield|quarry|military|education|institutional|religious">
+            <area mesh="true" fill="#0F1536"/>
+        </m>
+        <m k="amenity" v="kindergarten|school|college|university|hospital">
+            <area mesh="true" fill="#0F1536"/>
+        </m>
+        <m k="aeroway" v="aerodrome">
+            <area mesh="true" fill="#0F1536"/>
+        </m>
+        <!-- Forest -->
+        <m k="landuse|natural" v="forest|wood">
+            <area mesh="true" fill="#004C47"/>
+        </m>
+        <!-- Park, garden, cemetery -->
+        <m k="leisure" v="park|garden|golf_course|common|green" zoom-min="12">
+            <area mesh="true" fill="#004C47"/>
+        </m>
+        <m k="landuse" v="village_green|recreation_ground|cemetery" zoom-min="12">
+            <area mesh="true" fill="#004C47"/>
+        </m>
+        <m k="amenity" v="grave_yard" zoom-min="12">
+            <area mesh="true" fill="#004C47"/>
+        </m>
+        <!-- Sand -->
+        <m k="natural" v="beach|sand" zoom-min="14">
+            <area mesh="true" fill="#3C3F55"/>
+        </m>
+        <!-- Wetland -->
+        <m k="natural" v="wetland|marsh" zoom-min="14">
+            <area mesh="true" fill="#803E4274"/>
+        </m>
+        <!-- Water -->
+        <m k="landuse" v="reservoir|basin">
+            <area mesh="true" fill="#474A80"/>
+        </m>
+    </m>
+
+    <!-- Water: river banks, docks and lakes -->
+    <m e="way" k="waterway" v="riverbank|dock">
+        <area mesh="false" fill="#474A80"/>
+    </m>
+    <m e="way" closed="yes" k="natural" v="water">
+        <area mesh="true" fill="#474A80"/>
+    </m>
+
+    <!-- Squares: pedestrian areas -->
+    <m e="way" closed="yes" k="highway" v="pedestrian" zoom-min="15">
+        <m k="area" v="yes|true">
+            <area mesh="true" fill="#9094AA"/>
+        </m>
+    </m>
+
+    <!-- Houses: a flat footprint, and from zoom 17 the ride app's own 3D blocks. The Karoo
+         draws those by itself in near-white; this gives them the house colour. -->
+    <m e="way" k="building" v="*" zoom-min="15">
+        <area mesh="true" fill="#46567B"/>
+    </m>
+    <m e="way" k="building" v="*" zoom-min="17">
+        <extrusion line-color="#3C4A6A" side-color="#3C4A6A" top-color="#46567B"/>
+    </m>
+
+    <!-- Line edges (drawn under every fill) -->
+    <m e="way" k="tunnel" v="~|false|no">
+        <m k="railway" v="rail" select="first">
+            <m k="service" v="yard|siding|spur|crossover">
+                <m zoom-min="15" zoom-max="15"><line stroke="#3E4A6A" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#3E4A6A" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#3E4A6A" cap="round" fix="true" width="1.74"/></m>
+                <m zoom-min="18"><line stroke="#3E4A6A" cap="round" fix="true" width="2.28"/></m>
+            </m>
+            <m k="~" v="~">
+                <m zoom-min="12" zoom-max="12"><line stroke="#3E4A6A" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="13" zoom-max="13"><line stroke="#3E4A6A" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="14" zoom-max="14"><line stroke="#3E4A6A" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#3E4A6A" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#3E4A6A" cap="round" fix="true" width="1.68"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#3E4A6A" cap="round" fix="true" width="2.18"/></m>
+                <m zoom-min="18"><line stroke="#3E4A6A" cap="round" fix="true" width="2.85"/></m>
+            </m>
+        </m>
+        <m k="highway" v="motorway_link|trunk_link">
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="2.68"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="3.69"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="4.80"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="6.27"/></m>
+        </m>
+        <m k="highway" v="secondary">
+            <m zoom-min="11" zoom-max="11"><line stroke="#9094AA" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="2.01"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="3.02"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="4.02"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="5.37"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="6.98"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="9.12"/></m>
+        </m>
+        <m k="highway" v="primary">
+            <m zoom-min="8" zoom-max="8"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="9" zoom-max="9"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="10" zoom-max="10"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="11" zoom-max="11"><line stroke="#9094AA" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="3.02"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="4.02"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="5.70"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="7.41"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="9.69"/></m>
+        </m>
+        <m k="highway" v="motorway|trunk">
+            <m zoom-min="8" zoom-max="8"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="9" zoom-max="9"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="10" zoom-max="10"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="11" zoom-max="11"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="2.68"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="3.69"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="4.36"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="6.04"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="7.85"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="10.26"/></m>
+        </m>
+    </m>
+
+    <!-- Line fills -->
+    <m e="way" k="tunnel" v="~|false|no">
+        <m k="waterway" v="stream">
+            <m zoom-min="15" zoom-max="15"><line stroke="#474A80" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#474A80" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#474A80" cap="round" fix="true" width="1.31"/></m>
+            <m zoom-min="18"><line stroke="#474A80" cap="round" fix="true" width="1.71"/></m>
+        </m>
+        <m k="waterway" v="river|canal">
+            <m zoom-min="9" zoom-max="9"><line stroke="#474A80" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="10" zoom-max="10"><line stroke="#474A80" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="11" zoom-max="11"><line stroke="#474A80" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#474A80" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#474A80" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#474A80" cap="round" fix="true" width="2.01"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#474A80" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#474A80" cap="round" fix="true" width="3.02"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#474A80" cap="round" fix="true" width="3.92"/></m>
+            <m zoom-min="18"><line stroke="#474A80" cap="round" fix="true" width="5.13"/></m>
+        </m>
+        <m k="highway" v="bridleway">
+            <m zoom-min="16" zoom-max="16"><line stroke="#555A72" cap="round" fix="true" width="2.01"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#555A72" cap="round" fix="true" width="2.62"/></m>
+            <m zoom-min="18"><line stroke="#555A72" cap="round" fix="true" width="3.42"/></m>
+        </m>
+        <m k="highway" v="path" select="first">
+            <m k="bicycle" v="designated">
+                <m zoom-min="14" zoom-max="14"><line stroke="#6E7288" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#6E7288" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#6E7288" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#6E7288" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#6E7288" cap="round" fix="true" width="3.42"/></m>
+            </m>
+            <m k="~" v="~">
+                <m zoom-min="16" zoom-max="16"><line stroke="#555A72" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#555A72" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#555A72" cap="round" fix="true" width="3.42"/></m>
+            </m>
+        </m>
+        <m k="highway" v="footway" select="first">
+            <m k="bicycle" v="designated">
+                <m zoom-min="14" zoom-max="14"><line stroke="#6E7288" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#6E7288" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#6E7288" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#6E7288" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#6E7288" cap="round" fix="true" width="3.42"/></m>
+            </m>
+            <m k="~" v="~">
+                <line width="0.0"/>
+            </m>
+        </m>
+        <m k="highway" v="cycleway">
+            <m zoom-min="14" zoom-max="14"><line stroke="#6E7288" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#6E7288" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#6E7288" cap="round" fix="true" width="2.01"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#6E7288" cap="round" fix="true" width="2.62"/></m>
+            <m zoom-min="18"><line stroke="#6E7288" cap="round" fix="true" width="3.42"/></m>
+        </m>
+        <m k="highway" v="track" select="first">
+            <m k="tracktype" v="grade1|grade2|grade3">
+                <m zoom-min="14" zoom-max="14"><line stroke="#6E7288" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#6E7288" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#6E7288" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#6E7288" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#6E7288" cap="round" fix="true" width="3.42"/></m>
+            </m>
+            <m k="tracktype" v="grade4|grade5">
+                <m zoom-min="16" zoom-max="16"><line stroke="#555A72" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#555A72" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#555A72" cap="round" fix="true" width="3.42"/></m>
+            </m>
+            <m k="surface" v="ground|grass|dirt|earth|mud|sand">
+                <m zoom-min="16" zoom-max="16"><line stroke="#555A72" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#555A72" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#555A72" cap="round" fix="true" width="3.42"/></m>
+            </m>
+            <m k="~" v="~">
+                <m zoom-min="14" zoom-max="14"><line stroke="#6E7288" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#6E7288" cap="round" fix="true" width="1.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#6E7288" cap="round" fix="true" width="2.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#6E7288" cap="round" fix="true" width="2.62"/></m>
+                <m zoom-min="18"><line stroke="#6E7288" cap="round" fix="true" width="3.42"/></m>
+            </m>
+        </m>
+        <m k="aeroway" v="runway">
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="3.69"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="5.37"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="8.72"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="11.33"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="14.82"/></m>
+        </m>
+        <m k="aeroway" v="taxiway">
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="2.68"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="3.49"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="4.56"/></m>
+        </m>
+        <m k="railway" v="rail" select="first">
+            <m k="service" v="yard|siding|spur|crossover">
+                <m zoom-min="15" zoom-max="15"><line stroke="#5A6688" cap="round" fix="true" width="0.34"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#5A6688" cap="round" fix="true" width="0.87"/></m>
+                <m zoom-min="18"><line stroke="#5A6688" cap="round" fix="true" width="1.14"/></m>
+            </m>
+            <m k="~" v="~">
+                <m zoom-min="9" zoom-max="9"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="10" zoom-max="10"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="11" zoom-max="11"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="12" zoom-max="12"><line stroke="#5A6688" cap="round" fix="true" width="0.34"/></m>
+                <m zoom-min="13" zoom-max="13"><line stroke="#5A6688" cap="round" fix="true" width="0.34"/></m>
+                <m zoom-min="14" zoom-max="14"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="15" zoom-max="15"><line stroke="#5A6688" cap="round" fix="true" width="0.67"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#5A6688" cap="round" fix="true" width="1.01"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#5A6688" cap="round" fix="true" width="1.31"/></m>
+                <m zoom-min="18"><line stroke="#5A6688" cap="round" fix="true" width="1.71"/></m>
+            </m>
+        </m>
+        <m k="highway" v="service" select="first">
+            <m k="service" v="driveway|parking_aisle|drive-through|emergency_access">
+                <line width="0.0"/>
+            </m>
+            <m k="~" v="~">
+                <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+                <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+                <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="3.05"/></m>
+                <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="3.99"/></m>
+            </m>
+        </m>
+        <m k="highway" v="residential|living_street|road|pedestrian|primary_link|secondary_link|tertiary_link">
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="2.68"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="4.02"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="5.23"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="6.84"/></m>
+        </m>
+        <m k="highway" v="tertiary|unclassified">
+            <m zoom-min="12" zoom-max="12"><line stroke="#9094AA" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#9094AA" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#9094AA" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#9094AA" cap="round" fix="true" width="3.35"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#9094AA" cap="round" fix="true" width="4.69"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#9094AA" cap="round" fix="true" width="6.10"/></m>
+            <m zoom-min="18"><line stroke="#9094AA" cap="round" fix="true" width="7.98"/></m>
+        </m>
+        <m k="highway" v="motorway_link|trunk_link">
+            <m zoom-min="13" zoom-max="13"><line stroke="#A38B57" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#A38B57" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#A38B57" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#A38B57" cap="round" fix="true" width="2.18"/></m>
+            <m zoom-min="18"><line stroke="#A38B57" cap="round" fix="true" width="2.85"/></m>
+        </m>
+        <m k="highway" v="secondary">
+            <m zoom-min="11" zoom-max="11"><line stroke="#C2B993" cap="round" fix="true" width="0.34"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#C2B993" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#C2B993" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#C2B993" cap="round" fix="true" width="2.01"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#C2B993" cap="round" fix="true" width="2.62"/></m>
+            <m zoom-min="18"><line stroke="#C2B993" cap="round" fix="true" width="3.42"/></m>
+        </m>
+        <m k="highway" v="primary">
+            <m zoom-min="8" zoom-max="8"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="9" zoom-max="9"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="10" zoom-max="10"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="11" zoom-max="11"><line stroke="#C2B993" cap="round" fix="true" width="0.67"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#C2B993" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#C2B993" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#C2B993" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#C2B993" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#C2B993" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#C2B993" cap="round" fix="true" width="3.05"/></m>
+            <m zoom-min="18"><line stroke="#C2B993" cap="round" fix="true" width="3.99"/></m>
+        </m>
+        <m k="highway" v="motorway|trunk">
+            <m zoom-min="8" zoom-max="8"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="9" zoom-max="9"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="10" zoom-max="10"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="11" zoom-max="11"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="12" zoom-max="12"><line stroke="#A38B57" cap="round" fix="true" width="1.01"/></m>
+            <m zoom-min="13" zoom-max="13"><line stroke="#A38B57" cap="round" fix="true" width="1.34"/></m>
+            <m zoom-min="14" zoom-max="14"><line stroke="#A38B57" cap="round" fix="true" width="1.68"/></m>
+            <m zoom-min="15" zoom-max="15"><line stroke="#A38B57" cap="round" fix="true" width="2.35"/></m>
+            <m zoom-min="16" zoom-max="16"><line stroke="#A38B57" cap="round" fix="true" width="3.35"/></m>
+            <m zoom-min="17" zoom-max="17"><line stroke="#A38B57" cap="round" fix="true" width="4.36"/></m>
+            <m zoom-min="18"><line stroke="#A38B57" cap="round" fix="true" width="5.70"/></m>
+        </m>
+    </m>
+
+    <!-- Place names: no street names, no POIs -->
+    <m e="node" k="place">
+        <m v="city">
+            <caption style="bold" fill="#F2F4FA" k="name" priority="2" size="17" font-family="thin" stroke="#0F1536" stroke-width="2.0"/>
+        </m>
+        <m v="town" zoom-min="9">
+            <caption style="bold" fill="#F2F4FA" k="name" priority="3" size="15" font-family="thin" stroke="#0F1536" stroke-width="2.0"/>
+        </m>
+        <m v="village" zoom-min="12">
+            <caption fill="#F2F4FA" k="name" priority="4" size="13" font-family="thin" stroke="#0F1536" stroke-width="2.0"/>
+        </m>
+        <m v="suburb" zoom-min="14">
+            <caption fill="#F2F4FA" k="name" priority="4" size="13" font-family="thin" stroke="#0F1536" stroke-width="2.0"/>
+        </m>
+        <m v="hamlet" zoom-min="14">
+            <caption fill="#F2F4FA" k="name" priority="5" size="11" font-family="thin" stroke="#0F1536" stroke-width="2.0"/>
+        </m>
+    </m>
+
+</rendertheme>

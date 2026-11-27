@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A map pin on the night-map navy with the waypoint pink: our own drawing, no game artwork. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#0F1536"
+        android:pathData="M8,0h32a8,8 0,0 1,8 8v32a8,8 0,0 1,-8 8h-32a8,8 0,0 1,-8 -8v-32a8,8 0,0 1,8 -8z" />
+    <path
+        android:fillColor="#9094AA"
+        android:pathData="M0,30l48,-12v6l-48,12z" />
+    <path
+        android:fillColor="#F06DB5"
+        android:pathData="M24,8c-5.5,0 -10,4.5 -10,10c0,7.5 10,20 10,20s10,-12.5 10,-20c0,-5.5 -4.5,-10 -10,-10zM24,22a4,4 0,1 1,0 -8a4,4 0,0 1,0 8z" />
+</vector>

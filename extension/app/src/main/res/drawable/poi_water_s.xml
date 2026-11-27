@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Written by make_icons.py: do not edit. Our own drawing, no game artwork. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp" android:height="20dp"
+    android:viewportWidth="38" android:viewportHeight="38">
+    <group android:translateX="3" android:translateY="3">
+        <path android:pathData="M6.9,-1.6 h18.2 a8.5,8.5 0 0,1 8.5,8.5 v18.2 a8.5,8.5 0 0,1 -8.5,8.5 h-18.2 a8.5,8.5 0 0,1 -8.5,-8.5 v-18.2 a8.5,8.5 0 0,1 8.5,-8.5 z" android:fillColor="#A9D3F5" android:strokeColor="#11132B" android:strokeWidth="2.8" />
+        <path android:pathData="M16 5.5 C16 5.5 8.5 14 8.5 19 A7.5 7.5 0 0 0 23.5 19 C23.5 14 16 5.5 16 5.5 Z" android:fillColor="#11132B" />
+        <path android:pathData="M12.2 19.2 A3.9 3.9 0 0 0 15.6 23" android:strokeColor="#A9D3F5" android:strokeWidth="1.8" android:strokeLineCap="round" />
+    </group>
+</vector>

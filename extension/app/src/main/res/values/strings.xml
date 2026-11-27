@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GTA VI map</string>
+    <string name="extension_name">GTA VI map</string>
+
+    <string name="f_wanted">Wanted level</string>
+    <string name="f_wanted_d">Heart rate as stars: one star per heart-rate zone</string>
+    <string name="f_health">Health bar</string>
+    <string name="f_health_d">Heart rate as a bar split at your zones</string>
+    <string name="f_stamina">Stamina bar</string>
+    <string name="f_stamina_d">Power (3 s) as a bar split at your zones</string>
+    <string name="f_focus">Focus bar</string>
+    <string name="f_focus_d">Cadence as a bar</string>
+    <string name="f_speed">Speed, big</string>
+    <string name="f_speed_d">Speed in large numbers</string>
+    <string name="f_cash">Distance and climb</string>
+    <string name="f_cash_d">Distance and climb in one cell, like two money counters</string>
+    <string name="f_time">Ride time and clock</string>
+    <string name="f_time_d">Ride time in large numbers with the time of day above it</string>
+
+    <string name="f_hud">Map row: speed, stars, watts, cadence</string>
+    <string name="f_hud_d">Four values in one cell above the map. Alone there, the Karoo makes its row taller.</string>
+    <string name="f_hudside">Map row, right half: stars, watts, cadence</string>
+    <string name="f_hudside_d">Put it beside "Speed, big" above the map: the thin row</string>
+    <string name="f_speedbar">Speed bar</string>
+    <string name="f_speedbar_d">Speed as a bar, to go with the other bars</string>
+    <string name="f_speedpair">Speed: average and max</string>
+    <string name="f_speedpair_d">Average and highest speed in one cell</string>
+    <string name="f_hrpair">Heart rate: average and max</string>
+    <string name="f_hrpair_d">Average and highest heart rate in one cell</string>
+    <string name="f_powerpair">Power: average and NP</string>
+    <string name="f_powerpair_d">Average and normalised power in one cell</string>
+    <string name="f_profile">Route elevation</string>
+    <string name="f_profile_d">The route\'s elevation with the places ahead; on a climb, the climb. For a big cell.</string>
+    <string name="f_nextplace">Next place: distance</string>
+    <string name="f_nextplace_d">How far to the next place on the route</string>
+    <string name="f_nextclimb">Next place: climb</string>
+    <string name="f_nextclimb_d">How much climbing to the next place on the route</string>
+    <string name="f_places">Places ahead</string>
+    <string name="f_places_d">A list of the places ahead with distance and climb. For a cell that fills the page.</string>
+</resources>

@@ -1,0 +1,20 @@
+# Build output and local settings
+build/
+.gradle/
+.kotlin/
+local.properties
+*.apk
+*.idsig
+
+# Not in git: the signing key, the fonts (extension/fonts/README.md) and the place list
+# (make_places.py), which are fetched or made locally
+extension/keystore/*.jks
+extension/fonts/*.ttf
+extension/places/
+downloads/
+
+# Written by make_style.py (OsmAnd), not used on the Karoo
+GTA-VI.render.xml
+
+.DS_Store
+__pycache__/
