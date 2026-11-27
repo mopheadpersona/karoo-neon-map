@@ -330,15 +330,22 @@ class GtaExtension : KarooExtension("gtavimap", "0.4") {
                     if (raw != null) {
                         // --es raw show|hide|auto --es id a1 --ef lat .. --ef lon .. --es icon food --es size m
                         icons.manual = raw != "auto"
+                        val icon = intent.getStringExtra("icon") ?: "food"
+                        // Standing (a Karoo pin) or flat, as the settings say.
+                        val kind = if (prefs.iconStyle == IconStyle.STANDING) Kind.entries.firstOrNull { it.icon == icon } else null
                         if (raw == "auto") icons.settingsChanged() else icons.raw(
                             raw, intent.getStringExtra("id") ?: "a1",
                             intent.getFloatExtra("lat", 0f).toDouble(), intent.getFloatExtra("lon", 0f).toDouble(),
-                            intent.getStringExtra("icon") ?: "food",
-                            IconSize.entries.firstOrNull { it.suffix == intent.getStringExtra("size") } ?: IconSize.M)
+                            icon, IconSize.entries.firstOrNull { it.suffix == intent.getStringExtra("size") } ?: IconSize.M, kind)
                         return
                     }
                     IconSize.entries.firstOrNull { it.suffix == intent.getStringExtra("size") }?.let { prefs.iconSize = it }
-                    Timber.i("%s: icon size %s", TAG, prefs.iconSize.label)
+                    // --es style standing|flat
+                    when (intent.getStringExtra("style")) {
+                        "standing" -> prefs.iconStyle = IconStyle.STANDING
+                        "flat" -> prefs.iconStyle = IconStyle.FLAT
+                    }
+                    Timber.i("%s: icon size %s, %s", TAG, prefs.iconSize.label, prefs.iconStyle.label)
                     icons.settingsChanged()
                     return
                 }

@@ -199,15 +199,22 @@ def path_of(el):
 
 def vector(name, dp):
     """One icon as an Android vector drawable of dp x dp."""
-    import xml.etree.ElementTree as ET
-    root = ET.fromstring(svg(name))
     out = ['<?xml version="1.0" encoding="utf-8"?>',
            '<!-- Written by make_icons.py: do not edit. Our own drawing, no game artwork. -->',
            '<vector xmlns:android="http://schemas.android.com/apk/res/android"',
            '    android:width="%ddp" android:height="%ddp"' % (dp, dp),
            '    android:viewportWidth="38" android:viewportHeight="38">',
            '    <group android:translateX="3" android:translateY="3">']
-    for el in root:
+    out += paths(svg(name), "        ")
+    out += ["    </group>", "</vector>", ""]
+    return "\n".join(out)
+
+
+def paths(svg_text, indent):
+    """The shapes of an SVG as Android <path> lines."""
+    import xml.etree.ElementTree as ET
+    out = []
+    for el in ET.fromstring(svg_text):
         attrs = ['android:pathData="%s"' % path_of(el)]
         if el.get("fill", "#000000") != "none":
             attrs.append('android:fillColor="%s"' % el.get("fill", "#000000"))
@@ -218,9 +225,83 @@ def vector(name, dp):
                 attrs.append('android:strokeLineCap="%s"' % el.get("stroke-linecap"))
             if el.get("stroke-linejoin"):
                 attrs.append('android:strokeLineJoin="%s"' % el.get("stroke-linejoin"))
-        out.append("        <path " + " ".join(attrs) + " />")
-    out += ["    </group>", "</vector>", ""]
+        out.append(indent + "<path " + " ".join(attrs) + " />")
+    return out
+
+
+# Standing icons: the ride app lays an extension's icons flat on a tilted map, but draws a place an
+# extension sends as Symbol.POI upright, from its own pictures: a base of 52 x 50 dp with the
+# type's 26 dp glyph on top at (poi_icon_start, poi_icon_top), stood on the place by its bottom
+# middle. The colour overlay replaces those pictures with ours. Which type each icon takes:
+# keep in step with Pins.kt.
+PIN_TYPES = {"shelter": "rest_stop", "water": "water", "groceries": "convenience_store", "food": "food",
+             "fuel": "gas_station", "coffee": "coffee", "bike": "bike_shop", "train": "transit_center",
+             "toilets": "restroom"}
+PIN_CANVAS = (52, 50)     # dp, fixed by the ride app: ic_pin_lap and ic_pin_poi are this size too
+PIN_ICON = 28             # dp, our icon, the large size
+PIN_LEFT, PIN_TOP = 12, 21  # dp, where our icon sits: centred, its bottom 1 dp above the place
+PIN_BADGE = 27            # dp, the base's own badge: a little smaller, so our icon always covers it
+OVERLAY_RES = os.path.join(HERE, "overlay", "res")
+
+
+def pin_base(stroke):
+    """The base every Karoo pin is drawn on: a dark badge in our style, the glyph on it."""
+    cw, ch = PIN_CANVAS
+    s = PIN_BADGE * 2 / 38.0               # the viewport has 2 units per dp, the icon 38 units
+    left = (PIN_LEFT + (PIN_ICON - PIN_BADGE) / 2.0) * 2
+    top = (PIN_TOP + (PIN_ICON - PIN_BADGE) / 2.0) * 2
+    frame = ('<svg xmlns="http://www.w3.org/2000/svg"><rect x="-1.6" y="-1.6" width="35.2" height="35.2"'
+             ' rx="8.5" fill="%s" stroke="%s" stroke-width="2.8"/></svg>' % (DARK, stroke))
+    out = ['<?xml version="1.0" encoding="utf-8"?>',
+           '<!-- Written by make_icons.py: do not edit. Our own drawing, replacing the ride app\'s. -->',
+           '<vector xmlns:android="http://schemas.android.com/apk/res/android"',
+           '    android:width="%ddp" android:height="%ddp"' % (cw, ch),
+           '    android:viewportWidth="%d" android:viewportHeight="%d">' % (cw * 2, ch * 2),
+           '    <group android:translateX="%s" android:translateY="%s" android:scaleX="%s" android:scaleY="%s">'
+           % (num(left), num(top), num(s), num(s)),
+           '        <group android:translateX="3" android:translateY="3">']
+    out += paths(frame, "            ")
+    out += ["        </group>", "    </group>", "</vector>", ""]
     return "\n".join(out)
+
+
+def pin_glyph(name):
+    """One of our icons in place of a Karoo glyph. The ride app draws a glyph at its own size at
+    (poi_icon_start, poi_icon_top); the inset of -1 dp lets our icon spill 1 dp over each side,
+    so it is 28 dp and covers the base's badge. All in one file: an overlay can't add resources."""
+    out = ['<?xml version="1.0" encoding="utf-8"?>',
+           '<!-- Written by make_icons.py: do not edit. Our own drawing, no game artwork. -->',
+           '<inset xmlns:android="http://schemas.android.com/apk/res/android"',
+           '    android:insetLeft="-1dp" android:insetTop="-1dp" android:insetRight="-1dp" android:insetBottom="-1dp">',
+           '    <vector android:width="%ddp" android:height="%ddp"' % (PIN_ICON, PIN_ICON),
+           '        android:viewportWidth="38" android:viewportHeight="38">',
+           '        <group android:translateX="3" android:translateY="3">']
+    out += paths(svg(name), "            ")
+    out += ["        </group>", "    </vector>", "</inset>", ""]
+    return "\n".join(out)
+
+
+def write_overlay():
+    folder = os.path.join(OVERLAY_RES, "drawable-anydpi-v24")   # where the ride app keeps its own
+    os.makedirs(folder, exist_ok=True)
+    for old in os.listdir(folder):
+        if old.startswith("ic_poi_"):
+            os.remove(os.path.join(folder, old))
+    with open(os.path.join(folder, "ic_poi_layer_base.xml"), "w") as f:
+        f.write(pin_base(TINTS["route"]))
+    with open(os.path.join(folder, "ic_poi_layer_base_active.xml"), "w") as f:
+        f.write(pin_base("#FFFFFF"))
+    for name, kind in PIN_TYPES.items():
+        with open(os.path.join(folder, "ic_poi_%s.xml" % kind), "w") as f:
+            f.write(pin_glyph(name))
+    with open(os.path.join(OVERLAY_RES, "values", "pins.xml"), "w") as f:
+        f.write('<?xml version="1.0" encoding="utf-8"?>\n'
+                '<!-- Written by make_icons.py: do not edit. Where the ride app puts a pin\'s glyph on its base. -->\n'
+                '<resources>\n'
+                '    <dimen name="poi_icon_start">%sdp</dimen>\n'
+                '    <dimen name="poi_icon_top">%sdp</dimen>\n'
+                '</resources>\n' % (num(PIN_LEFT + 1), num(PIN_TOP + 1)))
+    print("wrote %d pin drawables into overlay/res/" % (len(PIN_TYPES) + 2))
 
 
 CSS = """
@@ -341,6 +422,7 @@ def main():
         with open(os.path.join(DRAWABLES, "poi_%s_l.xml" % name), "w") as f:
             f.write(vector(name, SIZES_DP["l"]))
     print("wrote %d drawables into extension/app/src/main/res/drawable/" % (len(EXTENSION_ICONS) * len(SIZES_DP) + len(FIELD_ICONS)))
+    write_overlay()
     if "sheet" in sys.argv[1:]:
         out = os.path.join(HERE, "previews", "icons")
         os.makedirs(out, exist_ok=True)

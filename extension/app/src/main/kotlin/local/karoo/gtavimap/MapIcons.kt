@@ -21,6 +21,10 @@ import kotlin.math.hypot
  * list ([Places]), lets [IconPicker] choose, and tells the map which icons to add and which to
  * take away. It works again when the rider has moved a fair bit or the zoom changed.
  *
+ * Each place goes on the map either standing up, as a Karoo pin ([Pins]: upright on a tilted
+ * map, our picture through the colour overlay), or lying flat as a [Symbol.Icon] in the size of
+ * the settings. Standing needs the overlay 0.2; without it the icons lie flat.
+ *
  * Seen on the unit (27.11.2026): the ride app draws an icon at the drawable's own size, and it
  * does not repaint a still map when icons are added or taken away: the change shows the next
  * time the map moves or zooms. On a ride that is at once; on a desk it needs a nudge.
@@ -38,7 +42,7 @@ class MapIcons(private val context: Context, private val prefs: Prefs) {
 
     /** Called on the main thread when the place list has been read. */
     var onPlaces: (() -> Unit)? = null
-    private val shown = LinkedHashMap<String, Symbol.Icon>()
+    private val shown = LinkedHashMap<String, Symbol>()
 
     private var lat: Double? = null
     private var lon: Double? = null
@@ -48,6 +52,7 @@ class MapIcons(private val context: Context, private val prefs: Prefs) {
     private var doneLon = 0.0
     private var doneZoom = -1.0
     private var doneSize: IconSize? = null
+    private var doneStanding: Boolean? = null
 
     fun start() {
         Thread {
@@ -98,11 +103,12 @@ class MapIcons(private val context: Context, private val prefs: Prefs) {
     /** While true the icons are only moved by [raw]: for finding out on a desk what the map accepts. */
     var manual = false
 
-    /** One hand-made step: show or hide a single icon. */
-    fun raw(op: String, id: String, lat: Double, lon: Double, icon: String, size: IconSize) {
+    /** One hand-made step: show or hide a single icon, standing (as a pin of [kind]) or flat. */
+    fun raw(op: String, id: String, lat: Double, lon: Double, icon: String, size: IconSize, kind: Kind?) {
         val res = context.resources.getIdentifier("poi_${icon}_${size.suffix}", "drawable", context.packageName)
         when (op) {
-            "show" -> sendAll(ShowSymbols(listOf(Symbol.Icon(id, lat, lon, res, 0f))))
+            "show" -> sendAll(ShowSymbols(listOf(
+                if (kind != null) Pins.symbol(id, Place(-1, lat, lon, kind)) else Symbol.Icon(id, lat, lon, res, 0f))))
             "hide" -> sendAll(HideSymbols(listOf(id)))
         }
         Timber.i("%s: raw %s %s at %.5f, %.5f as %s %s to %d maps", GtaExtension.TAG, op, id, lat, lon, icon, size.suffix, maps.size)
@@ -111,7 +117,9 @@ class MapIcons(private val context: Context, private val prefs: Prefs) {
     private fun refresh(force: Boolean) {
         if (manual) return
         val list = places ?: return
-        val size = prefs.iconSize
+        // Standing icons are drawn by the overlay at the large size, so the spacing is the large one.
+        val standing = prefs.iconStyle == IconStyle.STANDING && overlayReady()
+        val size = if (standing) IconSize.L else prefs.iconSize
         if (!prefs.mapIcons) {
             if (shown.isNotEmpty()) {
                 sendAll(HideSymbols(shown.keys.toList()))
@@ -132,30 +140,51 @@ class MapIcons(private val context: Context, private val prefs: Prefs) {
         val mpp = IconPicker.metresPerPixel(lat, zoom)
         val moved = hypot((lat - doneLat) * Places.M_PER_DEGREE,
             (lon - doneLon) * Places.M_PER_DEGREE * cos(Math.toRadians(lat)))
-        if (!force && size == doneSize && abs(zoom - doneZoom) < 0.3 && moved < MOVE_PX * mpp) return
+        if (!force && size == doneSize && standing == doneStanding && abs(zoom - doneZoom) < 0.3 &&
+            moved < MOVE_PX * mpp) return
         doneLat = lat
         doneLon = lon
         doneZoom = zoom
         doneSize = size
+        doneStanding = standing
 
         val picked = IconPicker.pick(list, lat, lon, zoom, size.px(context))
-        val wanted = LinkedHashMap<String, Symbol.Icon>()
+        val wanted = LinkedHashMap<String, Symbol>()
         for (p in picked) {
-            val res = drawable(p.kind, size)
             val id = "p${p.id}"
-            if (res != 0) wanted[id] = Symbol.Icon(id, p.lat, p.lon, res, 0f)
+            if (standing) {
+                wanted[id] = Pins.symbol(id, p)
+            } else {
+                val res = drawable(p.kind, size)
+                if (res != 0) wanted[id] = Symbol.Icon(id, p.lat, p.lon, res, 0f)
+            }
         }
         val gone = shown.keys.filter { it !in wanted }
-        // An icon shown again under the same name replaces the old one, so another size or
-        // picture for a place needs no taking away first.
+        // An icon shown again under the same name replaces the old one, so another size,
+        // picture or style for a place needs no taking away first.
         val new = wanted.filter { (id, icon) -> shown[id] != icon }.values.toList()
         if (gone.isNotEmpty()) sendAll(HideSymbols(gone))
         if (new.isNotEmpty()) sendAll(ShowSymbols(new))
         shown.clear()
         shown.putAll(wanted)
         Status.iconsShown = shown.size
-        Status.iconNote = ""
-        Timber.i("%s: icons at zoom %.1f: %d shown (+%d, -%d)", GtaExtension.TAG, zoom, shown.size, new.size, gone.size)
+        Status.iconNote = if (prefs.iconStyle == IconStyle.STANDING && !standing)
+            "Lying flat: standing icons need the colour overlay 0.2." else ""
+        Timber.i("%s: icons at zoom %.1f, %s: %d shown (+%d, -%d)", GtaExtension.TAG, zoom,
+            if (standing) "standing" else "flat", shown.size, new.size, gone.size)
+    }
+
+    private var overlayChecked = 0L
+    private var overlay = false
+
+    /** Asked again every minute at most, so an overlay installed meanwhile is noticed. */
+    private fun overlayReady(): Boolean {
+        val now = android.os.SystemClock.elapsedRealtime()
+        if (overlayChecked == 0L || now - overlayChecked > 60_000) {
+            overlay = Pins.overlayReady(context)
+            overlayChecked = now
+        }
+        return overlay
     }
 
     private val drawables = HashMap<String, Int>()

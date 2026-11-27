@@ -6,6 +6,8 @@
 # Put it on the Karoo:   adb install -r overlay/build/neon-colours.apk
 # Then restart the Karoo once, and switch it on:
 #                        adb shell cmd overlay enable local.karoo.gtavicolours
+# After an update:       adb shell cmd overlay disable local.karoo.gtavicolours, then enable again:
+#                        the overlay manager takes the new file and the ride app reloads, no restart
 # Take it off again:     adb uninstall local.karoo.gtavicolours
 set -e
 cd "$(dirname "$0")"

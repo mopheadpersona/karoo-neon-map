@@ -27,6 +27,11 @@ class Prefs(context: Context) {
         get() = IconSize.entries.firstOrNull { it.name == store.getString("iconSize", null) } ?: IconSize.L
         set(value) = store.edit().putString("iconSize", value.name).apply()
 
+    /** Icons standing up as Karoo pins (they stay upright on a tilted map), or lying flat. */
+    var iconStyle: IconStyle
+        get() = IconStyle.entries.firstOrNull { it.name == store.getString("iconStyle", null) } ?: IconStyle.STANDING
+        set(value) = store.edit().putString("iconStyle", value.name).apply()
+
     /** The font of the fields' labels and numbers. */
     var condensedFont: CondensedFont
         get() = CondensedFont.entries.firstOrNull { it.name == store.getString("condensedFont", null) } ?: CondensedFont.BARLOW
@@ -47,6 +52,12 @@ enum class IconSize(val label: String, val suffix: String, val dp: Int) {
 
     /** The size on this screen, in pixels. */
     fun px(context: Context) = (dp * context.resources.displayMetrics.density).roundToInt()
+}
+
+/** How the place icons go on the map (Pins.kt). Standing ones are always the large size. */
+enum class IconStyle(val label: String) {
+    STANDING("standing up"),
+    FLAT("lying flat"),
 }
 
 enum class ThemeMode(val label: String) {

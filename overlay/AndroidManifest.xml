@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A resource overlay: it holds no code, only new colour values for the Karoo's ride app. -->
+<!-- A resource overlay: it holds no code, only new colours and pin pictures for the Karoo's ride app. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="local.karoo.gtavicolours"
-    android:versionCode="1"
-    android:versionName="0.1">
+    android:versionCode="2"
+    android:versionName="0.2">
 
-    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="27" />
+    <!-- minSdk under 24, or aapt2 drops the -v24 of drawable-anydpi-v24 and the ride app's own pictures win. -->
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="27" />
 
     <overlay
         android:targetPackage="io.hammerhead.rideapp"
@@ -13,5 +14,5 @@
 
     <application
         android:hasCode="false"
-        android:label="GTA VI route colours" />
+        android:label="GTA VI route colours and pins" />
 </manifest>

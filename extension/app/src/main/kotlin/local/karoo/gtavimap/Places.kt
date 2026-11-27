@@ -4,6 +4,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.pow
 
 /**
@@ -120,8 +122,21 @@ class Places(bytes: ByteArray) {
 
 /** Picks which places get an icon for a position and a zoom. Plain Kotlin, so it is tested on the Mac. */
 object IconPicker {
-    /** Places are looked for this far from the position, in screen pixels: the 480 x 800 screen and some room to pan. */
-    const val VIEW_PX = 700.0
+    /**
+     * Places are looked for this far from the position, in screen pixels. A flat map needs about
+     * 700 (the 480 x 800 screen and some room); a tilted one looks about three times as far
+     * towards the top, and the Karoo does not tell an extension the tilt, so always this far.
+     */
+    const val VIEW_PX = 2100.0
+
+    /** Gas stations, supermarkets, shelters and stations are looked for at least this far, in metres, at any zoom. */
+    const val FAR_MIN_M = 2000.0
+
+    /** And nothing further than this, in metres: the 10 km scale needed no more before (700 px). */
+    const val MAX_M = 40_000.0
+
+    /** When there are too many, the far kinds count as this many times closer. */
+    const val FAR_WEIGHT = 3.0
 
     /** No two icons closer than this many icon widths, so they never sit on top of each other. */
     const val GAP_ANY = 1.15
@@ -139,11 +154,14 @@ object IconPicker {
     fun pick(places: Places, lat: Double, lon: Double, zoom: Double, iconPx: Int): List<Place> {
         if (zoom < FAR) return emptyList()
         val mpp = metresPerPixel(lat, zoom)
+        val cosLat = cos(Math.toRadians(lat)).coerceAtLeast(0.01)
+        val view = min(VIEW_PX * mpp, MAX_M)
+        val farReach = max(view, FAR_MIN_M)
         // The same order whatever the position, so an icon does not come and go as the rider moves.
-        val candidates = places.near(lat, lon, VIEW_PX * mpp) { zoom >= it.fromZoom }
+        val candidates = places.near(lat, lon, farReach) { zoom >= it.fromZoom }
+            .filter { it.kind.fromZoom == FAR || dist2(it, lat, lon, cosLat) <= view * view }
             .sortedWith(compareBy({ it.kind.rank }, { it.id }))
 
-        val cosLat = cos(Math.toRadians(lat)).coerceAtLeast(0.01)
         val gapAny = iconPx * GAP_ANY * mpp
         val cell = iconPx * Kind.entries.maxOf { it.spread } * mpp
         val grid = HashMap<Long, MutableList<Spot>>()
@@ -172,8 +190,16 @@ object IconPicker {
             grid.getOrPut(gx * 1_000_003L + gy) { ArrayList() }.add(spot)
             kept.add(spot)
         }
-        if (kept.size > MAX_ICONS) kept.sortBy { it.x * it.x + it.y * it.y }
+        if (kept.size > MAX_ICONS) kept.sortBy {
+            (it.x * it.x + it.y * it.y) / if (it.place.kind.fromZoom == FAR) FAR_WEIGHT * FAR_WEIGHT else 1.0
+        }
         return kept.take(MAX_ICONS).map { it.place }
+    }
+
+    private fun dist2(p: Place, lat: Double, lon: Double, cosLat: Double): Double {
+        val x = (p.lon - lon) * Places.M_PER_DEGREE * cosLat
+        val y = (p.lat - lat) * Places.M_PER_DEGREE
+        return x * x + y * y
     }
 
     private class Spot(val place: Place, val x: Double, val y: Double)

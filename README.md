@@ -38,7 +38,10 @@ if you set it to "Always day" or "Always night".
 - **Map icons** for shelters, drinking water, groceries, food, gas stations, cafes, bike shops,
   train stations and toilets, from OpenStreetMap. Gas stations, supermarkets, shelters and train
   stations show from the 10 km scale, the rest from 500 m, toilets from 200 m. Icons never sit
-  on top of each other, and a street full of restaurants gets one burger.
+  on top of each other, and a street full of restaurants gets one burger. With the colour
+  overlay (below) they **stand upright on a tilted (3D) map** and a tap on one opens the Karoo's
+  card with "Nav To"; without it they lie flat on the map. They are placed around where you
+  are, so a map dragged far away shows none until you tap the locate button.
 
   ![The icons](docs/icons.png)
 
@@ -61,8 +64,11 @@ if you set it to "Always day" or "Always night".
 
 ![The map row above the map](docs/map-row.png)
 
-- **An optional colour overlay** for the ride app's route, reroute and climb lines (`overlay/`).
-  It needs adb and one restart of the Karoo.
+- **An optional colour overlay** (`overlay/`, `neon-colours.apk` in the release) for the ride
+  app's route, reroute and climb lines, and the pictures for the standing map icons. It swaps
+  the pictures of the Karoo's own map pins for nine kinds (water, food, gas station and so on)
+  for ours, and puts every other Karoo pin (places in your routes, lap markers) on a dark badge
+  in the same style. It needs adb and, the first time, one restart of the Karoo.
 
 ## Status
 
@@ -82,6 +88,14 @@ Elsewhere the map icons stay empty until you build a list for your region (see "
       adb install -r -g karoo-neon-map.apk
 
   `-g` gives it storage access at once, which it needs for the map theme.
+- **The colour overlay** (optional, adb only): download `neon-colours.apk` from the release, then
+
+      adb install -r neon-colours.apk
+
+  restart the Karoo once, and switch it on with `adb shell cmd overlay enable
+  local.karoo.gtavicolours`. To update it later: install the new one, then
+  `adb shell cmd overlay disable local.karoo.gtavicolours` and `enable` again; no restart. Take
+  it off with `adb uninstall local.karoo.gtavicolours`.
 
 Then add the fields in the Profiles app: a page, "Add field", scroll to the end, "GTA VI MAP".
 On the Karoo the extension is listed as "GTA VI map".
@@ -89,8 +103,8 @@ On the Karoo the extension is listed as "GTA VI map".
 **What it changes on your Karoo.** The map theme works by replacing the ride app's theme file,
 `/sdcard/offline_v15.xml`. Hammerhead's own file is kept as `/sdcard/offline_v15_ORIGINAL.xml`.
 The extension's own screen (apps list, "GTA VI map") has the switches (map theme, zoom by
-speed, map icons, icon size, fonts) and a button "Put Hammerhead's map back". Press it before
-you uninstall the extension, or the neon theme stays.
+speed, map icons, icon style standing or flat, icon size, fonts) and a button "Put Hammerhead's
+map back". Press it before you uninstall the extension, or the neon theme stays.
 
 ## Build
 
@@ -109,10 +123,13 @@ with the wrapper.
        sh extension/build.sh
 
    The app ends up in `extension/app/build/outputs/apk/debug/app-debug.apk`.
+4. The colour overlay, if you want it: `sh overlay/build.sh` (needs `ANDROID_HOME`), which writes
+   `overlay/build/neon-colours.apk`.
 
 The look is in tables, not in the files they write: `make_style.py` (colours and widths),
-`make_karoo_theme.py` (writes `karoo-native/`), `make_icons.py` (writes `icons/` and the app's
-icon drawables). `tools/native.py` puts a theme on the Karoo over adb without the extension.
+`make_karoo_theme.py` (writes `karoo-native/`), `make_icons.py` (writes `icons/`, the app's
+icon drawables and the overlay's pin pictures). `tools/native.py` puts a theme on the Karoo over
+adb without the extension.
 
 ## Licences
 

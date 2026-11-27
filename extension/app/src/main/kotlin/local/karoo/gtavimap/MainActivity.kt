@@ -23,6 +23,7 @@ class MainActivity : Activity() {
     private lateinit var zoomButton: Button
     private lateinit var themeButton: Button
     private lateinit var iconsButton: Button
+    private lateinit var styleButton: Button
     private lateinit var sizeButton: Button
     private lateinit var numbersButton: Button
     private lateinit var cashButton: Button
@@ -62,6 +63,12 @@ class MainActivity : Activity() {
             Status.settingsChanged?.invoke()
         }
         column.addView(iconsButton, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        styleButton = button {
+            val styles = IconStyle.entries
+            prefs.iconStyle = styles[(styles.indexOf(prefs.iconStyle) + 1) % styles.size]
+            Status.settingsChanged?.invoke()
+        }
+        column.addView(styleButton, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         sizeButton = button {
             val sizes = IconSize.entries
             prefs.iconSize = sizes[(sizes.indexOf(prefs.iconSize) + 1) % sizes.size]
@@ -114,7 +121,10 @@ class MainActivity : Activity() {
         zoomButton.text = "Zoom by speed: " + if (prefs.autoZoom) "on" else "off"
         themeButton.text = "Map theme: " + prefs.themeMode.label
         iconsButton.text = "Map icons: " + if (prefs.mapIcons) "on" else "off"
-        sizeButton.text = "Icon size: " + prefs.iconSize.label
+        styleButton.text = "Icon style: " + prefs.iconStyle.label
+        // Standing icons are drawn by the overlay, always large; the size is for flat ones.
+        sizeButton.text = "Icon size: " + if (prefs.iconStyle == IconStyle.STANDING) "large (when standing)"
+        else prefs.iconSize.label
         numbersButton.text = "Field numbers: " + prefs.condensedFont.label
         cashButton.text = "Field cash numbers: " + prefs.chunkyFont.label
         val storage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED

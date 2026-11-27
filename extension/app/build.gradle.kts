@@ -12,8 +12,8 @@ android {
         applicationId = "local.karoo.gtavimap"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.4"
+        versionCode = 5
+        versionName = "0.5"
     }
 
     // The key the published builds are signed with (keystore/README.md), when it is there. It is

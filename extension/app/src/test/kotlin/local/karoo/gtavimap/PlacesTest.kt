@@ -92,6 +92,27 @@ class PlacesTest {
     }
 
     @Test
+    fun `close in, a tilted map still gets what it can see`() {
+        // Zoom 17.8, the 50 m scale: a pixel is about 0.22 m, so 2100 px is about 460 m. The
+        // case seen on the unit (27.11.2026): the nearest gas station 660 m off, none shown.
+        val list = pack(at(0.0, -660.0, Kind.FUEL), at(0.0, 300.0, Kind.FOOD), at(0.0, 600.0, Kind.FOOD),
+            at(2_500.0, 0.0, Kind.FUEL))
+        val shown = IconPicker.pick(list, LAT, LON, 17.8, 52)
+        assertEquals(listOf(Kind.FUEL, Kind.FOOD), shown.map { it.kind })
+        assertEquals(LAT - 660.0 / Places.M_PER_DEGREE, shown[0].lat, 0.00001)
+    }
+
+    @Test
+    fun `when there are too many, gas stations and the like are kept further out`() {
+        // 225 restaurants 60 m apart around the rider, and a gas station 1 km off: of the 120
+        // kept, the gas station is one, though about 180 restaurants are nearer.
+        val grid = (0 until 225).map { at((it % 15 - 7) * 60.0, (it / 15 - 7) * 60.0, Kind.FOOD) }.toTypedArray()
+        val shown = IconPicker.pick(pack(*grid, at(0.0, 1_000.0, Kind.FUEL)), LAT, LON, 17.8, 52)
+        assertEquals(IconPicker.MAX_ICONS, shown.size)
+        assertTrue(shown.any { it.kind == Kind.FUEL })
+    }
+
+    @Test
     fun `the scale matches what the Karoo shows`() {
         // Read from the unit: at zoom 16 in Prague 100 m is about 130 px.
         assertEquals(130.0, 100.0 / IconPicker.metresPerPixel(50.08, 16.0), 2.0)
