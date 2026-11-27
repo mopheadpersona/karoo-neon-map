@@ -55,21 +55,23 @@ Elsewhere the map icons stay empty until you build a list for your region (see "
 
 ## Install
 
-1. Download `karoo-neon-map-<version>.apk` from the releases.
-2. Put it on the Karoo with adb (developer mode and USB debugging on):
+- **With the Karoo companion app**: sideload it with this link:
+  `https://github.com/mopheadpersona/karoo-neon-map/releases/latest/download/manifest.json`
+- **With adb** (developer mode and USB debugging on): download `karoo-neon-map.apk` from the
+  latest release, then
 
-       adb install -r -g karoo-neon-map-<version>.apk
+      adb install -r -g karoo-neon-map.apk
 
-   `-g` gives it storage access at once, which it needs for the map theme.
-3. Add the fields in the Profiles app: a page, "Add field", scroll to the end, "GTA VI MAP".
+  `-g` gives it storage access at once, which it needs for the map theme.
 
+Then add the fields in the Profiles app: a page, "Add field", scroll to the end, "GTA VI MAP".
 On the Karoo the extension is listed as "GTA VI map".
 
 **What it changes on your Karoo.** The map theme works by replacing the ride app's theme file,
 `/sdcard/offline_v15.xml`. Hammerhead's own file is kept as `/sdcard/offline_v15_ORIGINAL.xml`.
 The extension's own screen (apps list, "GTA VI map") has the switches (map theme, zoom by
 speed, map icons, icon size, fonts) and a button "Put Hammerhead's map back". Press it before
-you uninstall the extension, or the GTA-style theme stays.
+you uninstall the extension, or the neon theme stays.
 
 ## Build
 
