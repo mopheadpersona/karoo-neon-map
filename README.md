@@ -12,10 +12,29 @@ of the GTA VI in-game map.
 All pictures are real screenshots from a Karoo 2. The numbers on the data pages are made up
 (a desk test), and so is the route on the navigation pages.
 
+### By day and by night
+
+![The map by day and by night](docs/day-and-night.png)
+
+The day theme is for sunlight: lighter land and grey towns, dark labels. The night theme is the
+neon one. The extension switches between them with the Karoo's Dark Mode, or keeps one of them
+if you set it to "Always day" or "Always night".
+
+## What is in here, and what is not
+
+- **The map's look, not the map.** The themes tell the Karoo how to draw its own map: colours,
+  line widths, which roads and places show from which zoom. The map itself (streets, land,
+  houses) is still Hammerhead's own offline maps, the ones you download on the Karoo as usual.
+  Nothing here downloads or replaces map data.
+- **The extension** that puts the theme in place, draws the icons and the data fields.
+- **The tools that make it**: the colour tables, the icon drawings and the place list script.
+- Not here: anything from the game.
+
 ## What you get
 
-- **A map theme for the Karoo's own map**, by day and by night: teal land, navy towns, grey
-  roads with gold motorways, houses in 3D from the closest zoom. It follows the Karoo's Dark Mode.
+- **A map theme for the Karoo's own map**, by day and by night: at night teal land and navy
+  towns, by day lighter green land and grey towns; grey roads with gold motorways, houses in 3D
+  from the closest zoom. It follows the Karoo's Dark Mode.
 - **Map icons** for shelters, drinking water, groceries, food, gas stations, cafes, bike shops,
   train stations and toilets, from OpenStreetMap. Gas stations, supermarkets, shelters and train
   stations show from the 10 km scale, the rest from 500 m, toilets from 200 m. Icons never sit
